@@ -1,4 +1,15 @@
-var tagDictionary = [
+// ==UserScript==
+// @name         New Userscript
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://ibizafeedback.azurewebsites.net/powerbi
+// @grant        none
+// ==/UserScript==
+
+(function() {
+  var tagDictionary = [
     {
         commentTerms: ["ease", "easy", "easiest", "simple", "intuitive", "user friendly", "easier"],
         tag: "Ease of use"
@@ -24,10 +35,6 @@ var tagDictionary = [
         tag: "Hard to use"
     },
     {
-        commentTerms: ["support"],
-        tag: "Support"
-    }
-    {
         commentTerms:["bug", "bugs", "buggy", "crash", "crashes", "unstable", "stability"],
         tag:"Buggy"
     }
@@ -39,14 +46,12 @@ function getTag(currentString)
     for(j=0; j<tagDictionary.length;j++)
         {
             currentDictionaryItem = tagDictionary[j];
-            for(k=0;k<currentDictionaryItem.commentTerms.length;k++)
+            for(var k=0;k<currentDictionaryItem.commentTerms.length;k++)
             {
                 currentCommentTerm = currentDictionaryItem.commentTerms[k];
                 var regex = '\\b';
                 regex += currentCommentTerm;
                 regex += '\\b';
-
-                
                 if(new RegExp(regex, "i").test(currentString))
                 {
                     tag = currentDictionaryItem.tag;
@@ -57,32 +62,42 @@ function getTag(currentString)
     return tag;
 }
 
-// console.log(getTag("sdafh dsaf ajds klf;jadslkfadslkf j"));
-
-$("#npsEntriesTable tr").each(function(){
-	commentDivs = $(this).find(".commentColumn div");
-    var tag = "";
-
-	for(i=0;i<commentDivs.length;i++)
-    {
-        currentString = $(commentDivs[i]).text().toLowerCase();
-        if(currentString)
-        {
-            console.log("Current String is: " + currentString);
-            tag = getTag(currentString);
-            console.log("Tag is:" + tag);
-        }
-        
-    }    
-    tagInput = $(this).find(".tagsColumn input.ui-autocomplete-input");
-    tagInput.val(tag);
-});
-
-// $("#npsEntriesTable tr").each(function(){
-//     tagInput = $(this).find(".tagsColumn input.ui-autocomplete-input");
-//     var e = jQuery.Event("keydown");
-//     e.which = 9; // # Some key code value
-//     tagInput.trigger(e);
-// });
 
 
+
+
+
+    document.addEventListener('keydown', function(e) {
+  // pressed alt+g
+  if (e.keyCode == 71 && e.shiftKey && e.ctrlKey && e.altKey && !e.metaKey) {
+   // console.log(getTag("sdafh dsaf ajds klf;jadslkfadslkf j"));
+      $( document ).ready(function() {
+
+          $("#npsEntriesTable tr").each(function(){
+              var commentDivs = $(this).find(".commentColumn div");
+              var tag = "";
+
+              for(var i=0;i<commentDivs.length;i++)
+              {
+                  var currentString = $(commentDivs[i]).text().toLowerCase();
+                  if(currentString)
+                  {
+                      console.log("Current String is: " + currentString);
+                      tag = getTag(currentString);
+                      console.log("Tag is:" + tag);
+                  }
+              }
+              var tagInput = $(this).find(".tagsColumn input.ui-autocomplete-input");
+              tagInput.val(tag);
+          });
+     });
+
+      // $("#npsEntriesTable tr").each(function(){
+      //     tagInput = $(this).find(".tagsColumn input.ui-autocomplete-input");
+      //     var e = jQuery.Event("keydown");
+      //     e.which = 9; // # Some key code value
+      //     tagInput.trigger(e);
+      // });
+  }
+}, false);
+})();
