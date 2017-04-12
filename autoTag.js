@@ -31,7 +31,7 @@
         tag: "Slow"
     },
     {
-        commentTerms: ["not easy", "not easiest" ,"hard", "unintuitive","convoluted", "difficult", "confusing"],
+        commentTerms: ["not easy", "not easiest" ,"hard", "unintuitive","convoluted", "difficult", "confusing", "complex"],
         tag: "Hard to use"
     },
     {
